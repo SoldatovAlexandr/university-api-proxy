@@ -1,0 +1,13 @@
+logging:
+  level:
+    com.perspective.calculation: "${LOG_LEVEL:INFO}"
+    org.springframework: WARN
+  file:
+    name: target/log/application.log
+server:
+  port: 8080
+application:
+  omstu:
+    url: "${OMSTU_SCHEDULE_URL}"
+    schedule: "schedule/{type}/{oid}?start={start}&finish={finish}&lng=1"
+    type: "search?term={term}&type={type}"
