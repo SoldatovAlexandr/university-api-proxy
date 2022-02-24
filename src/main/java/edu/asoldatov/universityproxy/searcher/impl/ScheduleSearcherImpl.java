@@ -1,4 +1,4 @@
-package edu.asoldatov.universityproxy.searcher;
+package edu.asoldatov.universityproxy.searcher.impl;
 
 import edu.asoldatov.universityproxy.configuration.OmstuProperties;
 import edu.asoldatov.universityproxy.dto.client.SearchLessonDto;
@@ -7,6 +7,7 @@ import edu.asoldatov.universityproxy.dto.omstu.OmstuLessonDto;
 import edu.asoldatov.universityproxy.dto.omstu.OmstuTypeDto;
 import edu.asoldatov.universityproxy.exception.IntegrationException;
 import edu.asoldatov.universityproxy.exception.NotFoundException;
+import edu.asoldatov.universityproxy.searcher.ScheduleSearcher;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClientException;
