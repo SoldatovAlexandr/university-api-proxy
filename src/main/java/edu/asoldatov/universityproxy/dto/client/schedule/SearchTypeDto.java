@@ -1,4 +1,4 @@
-package edu.asoldatov.universityproxy.dto.client;
+package edu.asoldatov.universityproxy.dto.client.schedule;
 
 import edu.asoldatov.universityproxy.common.ScheduleType;
 import lombok.*;

@@ -1,9 +1,9 @@
 package edu.asoldatov.universityproxy.searcher;
 
 import edu.asoldatov.universityproxy.common.ScheduleType;
-import edu.asoldatov.universityproxy.configuration.OmstuProperties;
-import edu.asoldatov.universityproxy.dto.client.SearchLessonDto;
-import edu.asoldatov.universityproxy.dto.client.SearchTypeDto;
+import edu.asoldatov.universityproxy.configuration.properties.ScheduleProperties;
+import edu.asoldatov.universityproxy.dto.client.schedule.SearchLessonDto;
+import edu.asoldatov.universityproxy.dto.client.schedule.SearchTypeDto;
 import edu.asoldatov.universityproxy.dto.omstu.OmstuLessonDto;
 import edu.asoldatov.universityproxy.dto.omstu.OmstuTypeDto;
 import edu.asoldatov.universityproxy.exception.IntegrationException;
@@ -24,7 +24,7 @@ import static org.mockito.Mockito.*;
 public class ScheduleSearcherTest {
 
     private final RestTemplate restTemplate = mock(RestTemplate.class);
-    private final OmstuProperties omstuProperties = mock(OmstuProperties.class);
+    private final ScheduleProperties omstuProperties = mock(ScheduleProperties.class);
 
     private ScheduleSearcher scheduleSearcher;
 

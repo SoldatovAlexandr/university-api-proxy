@@ -1,6 +1,6 @@
 package edu.asoldatov.universityproxy.searcher;
 
-import edu.asoldatov.universityproxy.configuration.AuthProperties;
+import edu.asoldatov.universityproxy.configuration.properties.AuthProperties;
 import edu.asoldatov.universityproxy.dto.client.LoginDto;
 import edu.asoldatov.universityproxy.exception.AuthException;
 import edu.asoldatov.universityproxy.exception.IntegrationException;

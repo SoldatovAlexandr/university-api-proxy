@@ -1,4 +1,4 @@
-package edu.asoldatov.universityproxy.configuration;
+package edu.asoldatov.universityproxy.configuration.properties;
 
 import lombok.Getter;
 import lombok.Setter;

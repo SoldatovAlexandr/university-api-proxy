@@ -1,4 +1,4 @@
-package edu.asoldatov.universityproxy.dto.client;
+package edu.asoldatov.universityproxy.dto.client.schedule;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;

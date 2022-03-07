@@ -1,4 +1,4 @@
-package edu.asoldatov.universityproxy.configuration;
+package edu.asoldatov.universityproxy.configuration.properties;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -7,7 +7,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @Getter
 @Setter
 @ConfigurationProperties(prefix = "application.omstu.data")
-public class OmstuProperties {
+public class ScheduleProperties {
 
     private String url;
     private String schedule;
