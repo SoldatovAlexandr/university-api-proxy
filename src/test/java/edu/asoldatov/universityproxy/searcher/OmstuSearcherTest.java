@@ -15,6 +15,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
+import java.io.IOException;
+import java.net.HttpURLConnection;
 import java.net.URI;
 import java.util.List;
 
@@ -31,8 +33,9 @@ public class OmstuSearcherTest {
     private final ResponseEntity<String> loginResponseMock = mock(ResponseEntity.class);
     private final HttpHeaders headersMock = mock(HttpHeaders.class);
     private final ResponseEntity<String> authResponseMock = mock(ResponseEntity.class);
-    private final ResponseEntity<String> redirectResponseMock = mock(ResponseEntity.class);
     private final HttpHeaders redirectHeadersMock = mock(HttpHeaders.class);
+    private final HttpConnectionWrapper httpConnectionWrapper = mock(HttpConnectionWrapper.class);
+    private final HttpURLConnection connection = mock(HttpURLConnection.class);
 
     private OmstuSearcher omstuSearcher;
 
@@ -47,16 +50,17 @@ public class OmstuSearcherTest {
     private static final String AUTH_URL = "https://test.ru/auth";
 
     @BeforeEach
-    void setUp() {
+    void setUp() throws IOException {
         when(authProperties.getUrl()).thenReturn("https://test.ru/");
         when(authProperties.getLogin()).thenReturn("login");
         when(authProperties.getAuth()).thenReturn("auth");
+        when(httpConnectionWrapper.connect(redirectUri)).thenReturn(connection);
 
-        omstuSearcher = new OmstuSearcherImpl(restTemplate, authProperties);
+        omstuSearcher = new OmstuSearcherImpl(restTemplate, authProperties, httpConnectionWrapper);
     }
 
     @Test
-    void login_success() {
+    void login_success() throws IOException {
         List<String> redirectCookie = List.of("STUDSESSID=1vd635vdubeae2f66f86llllj5; path=/", "JAVASESID=1223");
 
         when(restTemplate.postForEntity(eq(LOGIN_URL), any(), eq(String.class))).thenReturn(loginResponseMock);
@@ -67,9 +71,8 @@ public class OmstuSearcherTest {
         when(authResponseMock.getStatusCode()).thenReturn(HttpStatus.MOVED_PERMANENTLY);
         when(authResponseMock.getHeaders()).thenReturn(headersMock);
         when(headersMock.getLocation()).thenReturn(redirectUri);
+        when(connection.getHeaderFields()).thenReturn(redirectHeadersMock);
 
-        when(restTemplate.getForEntity(redirectUri, String.class)).thenReturn(redirectResponseMock);
-        when(redirectResponseMock.getHeaders()).thenReturn(redirectHeadersMock);
         when(redirectHeadersMock.get("Set-Cookie")).thenReturn(redirectCookie);
 
         String token = omstuSearcher.login(loginDto);
@@ -81,7 +84,7 @@ public class OmstuSearcherTest {
                 .postForEntity(eq(LOGIN_URL), loginHttpEntityCaptor.capture(), eq(String.class));
         verify(restTemplate, times(1))
                 .postForEntity(eq(AUTH_URL), authHttpEntityCaptor.capture(), eq(String.class));
-        verify(restTemplate, times(1)).getForEntity(redirectUri, String.class);
+        verify(httpConnectionWrapper, times(1)).connect(redirectUri);
 
         assertEquals("1vd635vdubeae2f66f86llllj5", token);
         assertEquals("{AUTH_FORM=[Y], TYPE=[AUTH], USER_LOGIN=[test@test.ru], USER_PASSWORD=[password]}",
@@ -113,9 +116,8 @@ public class OmstuSearcherTest {
         when(authResponseMock.getStatusCode()).thenReturn(HttpStatus.MOVED_PERMANENTLY);
         when(authResponseMock.getHeaders()).thenReturn(headersMock);
         when(headersMock.getLocation()).thenReturn(redirectUri);
+        when(connection.getHeaderFields()).thenReturn(redirectHeadersMock);
 
-        when(restTemplate.getForEntity(redirectUri, String.class)).thenReturn(redirectResponseMock);
-        when(redirectResponseMock.getHeaders()).thenReturn(redirectHeadersMock);
         when(redirectHeadersMock.get("Set-Cookie")).thenReturn(null);
 
         AuthException authException = assertThrows(AuthException.class, () -> omstuSearcher.login(loginDto));
@@ -134,9 +136,8 @@ public class OmstuSearcherTest {
         when(authResponseMock.getStatusCode()).thenReturn(HttpStatus.MOVED_PERMANENTLY);
         when(authResponseMock.getHeaders()).thenReturn(headersMock);
         when(headersMock.getLocation()).thenReturn(redirectUri);
+        when(connection.getHeaderFields()).thenReturn(redirectHeadersMock);
 
-        when(restTemplate.getForEntity(redirectUri, String.class)).thenReturn(redirectResponseMock);
-        when(redirectResponseMock.getHeaders()).thenReturn(redirectHeadersMock);
         when(redirectHeadersMock.get("Set-Cookie")).thenReturn(redirectCookie);
 
         AuthException authException = assertThrows(AuthException.class, () -> omstuSearcher.login(loginDto));

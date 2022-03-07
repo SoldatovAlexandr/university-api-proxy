@@ -17,7 +17,7 @@ import java.util.List;
 
 @Log4j2
 @RestController
-@RequestMapping("/schedule")
+@RequestMapping("/api/v1/schedule")
 @RequiredArgsConstructor
 public class ScheduleController {
 
