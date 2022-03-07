@@ -16,3 +16,5 @@ application:
       url: "${OMSTU_AUTH_URL}"
       login: "ecab/index.php?login=yes"
       auth: "ecab/up.php?student=1"
+    educab:
+      url: "${OMSTU_EDUCAB_URL}"
