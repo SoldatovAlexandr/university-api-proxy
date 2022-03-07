@@ -1,7 +1,7 @@
 package edu.asoldatov.universityproxy.api;
 
-import edu.asoldatov.universityproxy.dto.client.grade.GradeBookDto;
 import edu.asoldatov.universityproxy.dto.client.TokenDto;
+import edu.asoldatov.universityproxy.dto.client.grade.GradeBookDto;
 import edu.asoldatov.universityproxy.service.GradeService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -20,7 +20,7 @@ public class GradeController {
 
     @PostMapping("/")
     public GradeBookDto getGrades(@RequestBody TokenDto tokenDto) {
-        log.info("Get grades by token {}", tokenDto.getToken());
+        log.info("Get grades by token [{}]", tokenDto.getToken());
         return gradeService.search(tokenDto.getToken());
     }
 }

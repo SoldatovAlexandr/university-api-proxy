@@ -24,20 +24,21 @@ public class EduCabSearcherImpl implements EduCabSearcher {
 
     @Override
     public Document search(String token, DataType type) {
+        String path = String.format(PATH_FORMAT, type.getValue(), type.getMode());
+        return search(token, path);
+    }
+
+    @Override
+    public Document search(String token, String path) {
         try {
-            String url = buildUrl(type);
+            String url = UriComponentsBuilder.fromHttpUrl(eduCabProperties.getUrl() + path).toUriString();
             Document document = Jsoup.connect(url).cookie(STUD_SES_ID_COOKIE_NAME, token).get();
             if (document.location().equals(url)) {
                 return document;
             }
             throw new AuthException("Token expired");
         } catch (IOException e) {
-            throw new IntegrationException(String.format("Can not search for type [%s]", type), e);
+            throw new IntegrationException(String.format("Can not search for path [%s]", path), e);
         }
-    }
-
-    private String buildUrl(DataType type) {
-        String path = String.format(PATH_FORMAT, type.getValue(), type.getMode());
-        return UriComponentsBuilder.fromHttpUrl(eduCabProperties.getUrl() + path).toUriString();
     }
 }
