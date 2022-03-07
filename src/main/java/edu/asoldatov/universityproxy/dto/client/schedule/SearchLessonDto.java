@@ -1,4 +1,4 @@
-package edu.asoldatov.universityproxy.dto.client;
+package edu.asoldatov.universityproxy.dto.client.schedule;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import edu.asoldatov.universityproxy.common.ScheduleType;
@@ -10,6 +10,7 @@ import java.time.LocalDate;
 @Setter
 @Getter
 @ToString
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode

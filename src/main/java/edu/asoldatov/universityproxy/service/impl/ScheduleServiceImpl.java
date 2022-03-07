@@ -1,11 +1,12 @@
-package edu.asoldatov.universityproxy.service;
+package edu.asoldatov.universityproxy.service.impl;
 
-import edu.asoldatov.universityproxy.dto.client.ClientLessonDto;
-import edu.asoldatov.universityproxy.dto.client.ClientTypeDto;
-import edu.asoldatov.universityproxy.dto.client.SearchLessonDto;
-import edu.asoldatov.universityproxy.dto.client.SearchTypeDto;
+import edu.asoldatov.universityproxy.dto.client.schedule.ClientLessonDto;
+import edu.asoldatov.universityproxy.dto.client.schedule.ClientTypeDto;
+import edu.asoldatov.universityproxy.dto.client.schedule.SearchLessonDto;
+import edu.asoldatov.universityproxy.dto.client.schedule.SearchTypeDto;
 import edu.asoldatov.universityproxy.mapper.ScheduleMapper;
 import edu.asoldatov.universityproxy.searcher.ScheduleSearcher;
+import edu.asoldatov.universityproxy.service.ScheduleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

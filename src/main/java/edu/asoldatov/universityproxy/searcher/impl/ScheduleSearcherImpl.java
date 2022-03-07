@@ -1,12 +1,13 @@
-package edu.asoldatov.universityproxy.searcher;
+package edu.asoldatov.universityproxy.searcher.impl;
 
-import edu.asoldatov.universityproxy.configuration.OmstuProperties;
-import edu.asoldatov.universityproxy.dto.client.SearchLessonDto;
-import edu.asoldatov.universityproxy.dto.client.SearchTypeDto;
+import edu.asoldatov.universityproxy.configuration.properties.ScheduleProperties;
+import edu.asoldatov.universityproxy.dto.client.schedule.SearchLessonDto;
+import edu.asoldatov.universityproxy.dto.client.schedule.SearchTypeDto;
 import edu.asoldatov.universityproxy.dto.omstu.OmstuLessonDto;
 import edu.asoldatov.universityproxy.dto.omstu.OmstuTypeDto;
 import edu.asoldatov.universityproxy.exception.IntegrationException;
 import edu.asoldatov.universityproxy.exception.NotFoundException;
+import edu.asoldatov.universityproxy.searcher.ScheduleSearcher;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClientException;
@@ -23,7 +24,7 @@ public class ScheduleSearcherImpl implements ScheduleSearcher {
     private static final String SEARCH_DATE_FORMAT = "yyyy.MM.dd";
 
     private final RestTemplate restTemplate;
-    private final OmstuProperties properties;
+    private final ScheduleProperties properties;
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern(SEARCH_DATE_FORMAT);
 
     @Override

@@ -8,6 +8,13 @@ server:
   port: 8080
 application:
   omstu:
-    url: "${OMSTU_SCHEDULE_URL}"
-    schedule: "schedule/{type}/{oid}?start={start}&finish={finish}&lng=1"
-    type: "search?term={term}&type={type}"
+    data:
+      url: "${OMSTU_SCHEDULE_URL}"
+      schedule: "api/schedule/{type}/{oid}?start={start}&finish={finish}&lng=1"
+      type: "api/search?term={term}&type={type}"
+    auth:
+      url: "${OMSTU_AUTH_URL}"
+      login: "ecab/index.php?login=yes"
+      auth: "ecab/up.php?student=1"
+    educab:
+      url: "${OMSTU_EDUCAB_URL}"

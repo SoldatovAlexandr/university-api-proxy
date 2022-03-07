@@ -1,8 +1,8 @@
 package edu.asoldatov.universityproxy.mapper;
 
 import edu.asoldatov.universityproxy.common.ScheduleType;
-import edu.asoldatov.universityproxy.dto.client.ClientLessonDto;
-import edu.asoldatov.universityproxy.dto.client.ClientTypeDto;
+import edu.asoldatov.universityproxy.dto.client.schedule.ClientLessonDto;
+import edu.asoldatov.universityproxy.dto.client.schedule.ClientTypeDto;
 import edu.asoldatov.universityproxy.dto.omstu.OmstuLessonDto;
 import edu.asoldatov.universityproxy.dto.omstu.OmstuTypeDto;
 import edu.asoldatov.universityproxy.exception.TransformException;
