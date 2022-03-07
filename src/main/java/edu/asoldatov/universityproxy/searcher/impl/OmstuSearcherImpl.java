@@ -4,6 +4,7 @@ import edu.asoldatov.universityproxy.configuration.properties.AuthProperties;
 import edu.asoldatov.universityproxy.dto.client.LoginDto;
 import edu.asoldatov.universityproxy.exception.AuthException;
 import edu.asoldatov.universityproxy.exception.IntegrationException;
+import edu.asoldatov.universityproxy.searcher.HttpConnectionWrapper;
 import edu.asoldatov.universityproxy.searcher.OmstuSearcher;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -18,6 +19,8 @@ import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.io.IOException;
+import java.net.HttpURLConnection;
 import java.net.URI;
 import java.util.List;
 
@@ -29,7 +32,7 @@ public class OmstuSearcherImpl implements OmstuSearcher {
     private static final String COOKIE_HEADER_NAME = "Cookie";
 
     private static final String COOKIE_SEPARATOR = ";";
-    private static final String STUD_SESS_ID_TOKEN_NAME = "STUDSESSID";
+    private static final int ACTUAL_TOKEN_INDEX = 0;
 
     private static final int TOKEN_START_INDEX = 11;
     private static final int TOKEN_FINISH_INDEX = 37;
@@ -44,11 +47,13 @@ public class OmstuSearcherImpl implements OmstuSearcher {
     private final RestTemplate restTemplate;
     private final String loginUrl;
     private final String authUrl;
+    private final HttpConnectionWrapper connectionWrapper;
 
-    public OmstuSearcherImpl(RestTemplate restTemplate, AuthProperties properties) {
+    public OmstuSearcherImpl(RestTemplate restTemplate, AuthProperties properties, HttpConnectionWrapper connectionWrapper) {
         this.restTemplate = restTemplate;
         this.loginUrl = UriComponentsBuilder.fromHttpUrl(properties.getUrl() + properties.getLogin()).toUriString();
         this.authUrl = UriComponentsBuilder.fromHttpUrl(properties.getUrl() + properties.getAuth()).toUriString();
+        this.connectionWrapper = connectionWrapper;
     }
 
     /**
@@ -63,7 +68,7 @@ public class OmstuSearcherImpl implements OmstuSearcher {
             String cookie = doLoginRequest(request.getLogin(), request.getPassword());
             URI redirectUri = doAuthRequest(cookie);
             return doRedirectRequest(redirectUri);
-        } catch (RestClientException exception) {
+        } catch (RestClientException | IOException exception) {
             throw new IntegrationException(String.format("Can not login for user [%s]", request.getLogin()));
         }
     }
@@ -97,9 +102,9 @@ public class OmstuSearcherImpl implements OmstuSearcher {
         }
     }
 
-    private String doRedirectRequest(final URI redirectUri) {
-        ResponseEntity<String> responseEntity = restTemplate.getForEntity(redirectUri, String.class);
-        List<String> headers = responseEntity.getHeaders().get(SET_COOKIE_HEADER_NAME);
+    private String doRedirectRequest(final URI redirectUri) throws IOException {
+        HttpURLConnection connection = connectionWrapper.connect(redirectUri);
+        List<String> headers = connection.getHeaderFields().get(SET_COOKIE_HEADER_NAME);
         if (headers == null) {
             throw new AuthException("Can not authorize. Headers from redirect not set.");
         }
@@ -113,11 +118,11 @@ public class OmstuSearcherImpl implements OmstuSearcher {
     }
 
     private String getStudSessIdToken(final List<String> headers) {
-        for (String header : headers) {
-            if (header.contains(STUD_SESS_ID_TOKEN_NAME)) {
-                return header.substring(TOKEN_START_INDEX, TOKEN_FINISH_INDEX);
-            }
+        try {
+            String header = headers.get(ACTUAL_TOKEN_INDEX);
+            return header.substring(TOKEN_START_INDEX, TOKEN_FINISH_INDEX);
+        } catch (Exception exception) {
+            throw new AuthException("Can not authorize. Token not set.");
         }
-        throw new AuthException("Can not authorize. Token not set.");
     }
 }

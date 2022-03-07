@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Log4j2
 @RestController
-@RequestMapping("/grades")
+@RequestMapping("/api/v1/grades")
 @RequiredArgsConstructor
 public class GradeController {
 
