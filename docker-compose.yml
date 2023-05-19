@@ -1,0 +1,11 @@
+version: '3.9'
+services:
+  application:
+    build: .
+    restart: always
+    environment:
+      OMSTU_SCHEDULE_URL: https://rasp.omgtu.ru/api/
+      OMSTU_AUTH_URL: https://omgtu.ru/
+      OMSTU_EDUCAB_URL: http://up.omgtu.ru/
+    ports:
+      - "8080:8080"
